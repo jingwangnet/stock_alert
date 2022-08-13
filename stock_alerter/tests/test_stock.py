@@ -1,11 +1,6 @@
 import unittest
+from ..stock import Stock
 
-
-class Stock:
-
-    def __init__(self, symbol):
-        self.symbol = symbol
-        self.price = None
 
 class StockTest(unittest.TestCase):
     
