@@ -1,6 +1,7 @@
 import unittest
 from datetime import datetime
 from ..stock import Stock
+from ..rule import PriceRule
 
 
 class StockTest(unittest.TestCase):
@@ -47,6 +48,32 @@ class StockTest(unittest.TestCase):
         self.assertFalse(self.goog.is_increasing_trend())
 
 
+class PriceRuleTest(unittest.TestCase):
 
-if __name__ == '__main__':
-    unittest.main()
+    @classmethod
+    def setUpClass(cls):
+        goog = Stock('GOOG')
+        goog.update(datetime(2014, 2, 10), 11)
+        cls.exchange = {'GOOG': goog}
+
+    def test_a_PriceRule_matches_when_it_meets_the_condition(self):
+        rule = PriceRule('GOOG', lambda stock: stock.price > 10)
+        self.assertTrue(rule.matches(self.exchange))
+
+    def test_a_PriceRule_is_False_the_condtion_is_not_met(self):
+        rule = PriceRule('GOOG', lambda stock: stock.price < 10)
+        self.assertFalse(rule.matches(self.exchange))
+
+    def test_a_priceRule_is_False_if_the_stock_is_not_in_the_exchange(self):        
+        rule = PriceRule('MSFT', lambda stock: stock.price > 10)
+        self.assertFalse(rule.matches(self.exchange))
+
+    def test_a_PriceRule_is_False_if_the_stock_hasnt_got_an_update_yet(self):
+        self.exchange['APPL'] = Stock('APPL')
+        rule = PriceRule('APPL', lambda stock: stock.price > 10)
+        self.assertFalse(rule.matches(self.exchange))
+        
+    def test_a_PricesRule_only_depends_on_its_stock(self):
+        rule = PriceRule('MSFT', lambda stock: stock.price > 10)
+        self.assertEqual({'MSFT'}, rule.depends_on())
+
