@@ -12,7 +12,7 @@ class StockTest(unittest.TestCase):
         self.assertIsNone(self.goog.price)
 
     def test_stock_update(self):
-        """An update shout set the price on thestock object
+        """An update shout set the price on the stock object
         We will be using the `datetime` module for timestamp
         """
 
