@@ -8,5 +8,7 @@ class Stock:
         self.price = None
 
     def update(self, timestamp, price):
+        if price < 0:
+            raise ValueError("Price shout not be negative")
         self.price = price
 
