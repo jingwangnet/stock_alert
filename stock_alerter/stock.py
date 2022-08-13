@@ -7,3 +7,6 @@ class Stock:
         self.symbol = symbol
         self.price = None
 
+    def update(self, timestamp, price):
+        self.price = price
+
